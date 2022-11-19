@@ -24,12 +24,12 @@ def Spylling(**kwargs):
 
 
 def spylling(
-    as_dir=False,
+    as_dir=True,
     zipped=False,
     excluded_types=None,
     excluded_args=None,
     verbose=False,
-    save_env=True,
+    save_env=False,
 ):
     def decorator_plot(func):
         @wraps(func)

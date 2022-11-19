@@ -16,9 +16,9 @@ class SpyllingFigure(Figure):
         *args,
         plot_func=None,
         data=None,
-        as_dir=False,
+        as_dir=True,
         zipped=False,
-        save_env=True,
+        save_env=False,
         excluded_types=None,
         excluded_args=None,
         verbose=False,
@@ -96,7 +96,7 @@ class SpyllingFigure(Figure):
         self.__save_text(rcParams_str, savedir_path / "matplotlibrc")
 
         # Is it worth implementing class specific save formats (for common ones)? Like
-        # DataFrames to csv or parquet, which have the advanatge of not being
+        # DataFrames to csv or parquet, which have the advantage of not being
         # Python-specific. Or give the user option to select the save method for
         # specific classes / data objects?
         args_to_save = set(data.keys()) - self.__excluded_args
@@ -110,7 +110,7 @@ class SpyllingFigure(Figure):
                 for file_name, buffer in self.__buffers.items():
                     zip.writestr(file_name, buffer.getvalue())
 
-        self.__buffers = {}
+        self.__buffers.clear()
 
     def __save_text(self, text, path):
         if self.__zipped:
