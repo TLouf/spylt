@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "spylt"
+version = "0.1.0"
+description = "Back up matplotlib's figure data for easy reproduction"
+authors = ["Thomas Louf <tlouf+pro@pm.me>"]
+license = "BSD"
+readme = "README.md"
+repository = "https://github.com/TLouf/spylt"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+matplotlib = "^3.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^6.0.0"
+
+[tool.poetry.group.lint.dependencies]
+black = "22.8.0"
+flake8 = "3.9.2"
+flake8-comprehensions = "3.1.0"
+flake8-bugbear = "21.3.2"
+isort = "5.10.1"
+absolufy-imports = "0.3.1"
+pre-commit = "^2.9.2"
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
