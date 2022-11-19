@@ -3,7 +3,7 @@ name = "spylt"
 version = "0.1.0"
 description = "Back up matplotlib's figure data for easy reproduction"
 authors = ["Thomas Louf <tlouf+pro@pm.me>"]
-license = "BSD"
+license = "BSD-3-Clause"
 readme = "README.md"
 repository = "https://github.com/TLouf/spylt"
 
