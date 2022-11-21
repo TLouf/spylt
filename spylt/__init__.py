@@ -1,10 +1,10 @@
 """Top-level package for spylt."""
 
 from spylt.core import SpyllingFigure
-from spylt.wrappers import Spylling, spylling
+from spylt.wrappers import SpyllingContext, spylling
 
 __all__ = [
     SpyllingFigure,
-    Spylling,
+    SpyllingContext,
     spylling,
 ]

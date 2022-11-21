@@ -10,7 +10,7 @@ from spylt.core import SpyllingFigure
 
 
 @contextmanager
-def Spylling(
+def SpyllingContext(
     as_dir: bool = True,
     zipped: bool = False,
     excluded_args: Iterable | None = None,
@@ -41,7 +41,7 @@ def Spylling(
     Examples
     --------
 
-    >>> with Spylling(verbose=True):
+    >>> with SpyllingContext(verbose=True):
     ...     # Code that creates your figure.
     """
     kwargs = {
@@ -144,7 +144,7 @@ def spylling(
                 data[all_arg_names[i]] = a
             data.update(kwargs)
 
-            with Spylling(
+            with SpyllingContext(
                 plot_generator=func,
                 data=data,
                 as_dir=as_dir,
