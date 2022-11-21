@@ -3,14 +3,18 @@ from collections.abc import Iterable
 from contextlib import contextmanager
 from functools import partial, wraps
 from importlib import import_module
+from typing import Any
 
 import matplotlib.pyplot as plt
 
+from spylt._typing import PlotGenType
 from spylt.core import SpyllingFigure
 
 
 @contextmanager
 def SpyllingContext(
+    plot_generator: PlotGenType | None = None,
+    data: dict[str, Any] | None = None,
     as_dir: bool = True,
     zipped: bool = False,
     excluded_args: Iterable | None = None,
@@ -45,6 +49,8 @@ def SpyllingContext(
     ...     # Code that creates your figure.
     """
     kwargs = {
+        "plot_generator": plot_generator,
+        "data": data,
         "as_dir": as_dir,
         "zipped": zipped,
         "excluded_args": excluded_args,
