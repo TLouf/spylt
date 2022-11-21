@@ -5,27 +5,61 @@ import pickle
 import subprocess
 import sys
 import zipfile
+from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 from matplotlib.pyplot import Figure, rcParams
 
+from spylt._typing import PlotGenType
+
 
 class SpyllingFigure(Figure):
+    """Figure subclass that will backup data to disk on save.
+
+    Parameters
+    ----------
+    *args
+        :py:class:`matplotlib.figure.Figure` init arguments.
+    plot_generator
+        Function, method or module used to generate the figure.
+    data
+        Dictionary containing all the data objects necessary to reproduce the figure
+        with `plot_generator`.
+    as_dir
+        Whether to save the backup in a child directory, named after the figure
+        file's name.
+    zipped
+        Whether to save the backup in a zipped directory, named after the figure
+        file's name. If as_dir is True too, only a zip will be saved.
+    excluded_args
+        Iterable of argument names not to save even if they are present in `data`.
+    excluded_types
+        Iterable of argument types not to save even if they are present in `data`.
+    save_env
+        Whether to save a file listing the packages installed in the virtual environment
+        (`requirements.txt` for `pip`, `environment.yml` for `conda`).
+    verbose
+        Whether to print for every file saved to disk.
+    **kwargs
+        :py:class:`matplotlib.figure.Figure` init keyword arguments.
+    """
+
     def __init__(
         self,
         *args,
-        plot_func=None,
-        data=None,
-        as_dir=True,
-        zipped=False,
-        save_env=False,
-        excluded_types=None,
-        excluded_args=None,
-        verbose=False,
+        plot_generator: PlotGenType | None = None,
+        data: dict[str, Any] | None = None,
+        as_dir: bool = True,
+        zipped: bool = False,
+        excluded_args: Iterable | None = None,
+        excluded_types: Iterable | None = None,
+        save_env: bool = False,
+        verbose: bool = False,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
-        self.__plot_func = plot_func
+        self.__plot_generator = plot_generator
         self.__data = data
         self.__as_dir = as_dir
         self.__zipped = zipped
@@ -33,19 +67,19 @@ class SpyllingFigure(Figure):
         self.__verbose = verbose
         self.__verbose_print = print if self.__verbose else lambda *a, **k: None
         if excluded_types is None:
-            excluded_types = []
+            excluded_types = ()
         self.__excluded_types = tuple(excluded_types)
         if excluded_args is None:
-            excluded_args = []
+            excluded_args = set()
         self.__excluded_args = set(excluded_args)
         self.__buffers = {}
 
-    def savefig(self, *args, plot_func=None, data=None, **kwargs):
+    def savefig(self, *args, **kwargs):
         # savefig first to limit possibility of a bug from our side to impede saving.
         super().savefig(*args, **kwargs)
 
-        plot_func = plot_func or self.__plot_func
-        data = data or self.__data or {}
+        plot_generator = self.__plot_generator
+        data = self.__data or {}
         self.__buffers = {}
 
         fig_path = Path(args[0]).absolute()
@@ -81,9 +115,9 @@ class SpyllingFigure(Figure):
                 except subprocess.CalledProcessError:
                     pass
 
-        if plot_func is not None:
-            plot_func_def = inspect.getsource(plot_func)
-            self.__save_text(plot_func_def, savedir_path / f"{plot_func.__name__}.py")
+        if plot_generator is not None:
+            source = inspect.getsource(plot_generator)
+            self.__save_text(source, savedir_path / f"{plot_generator.__name__}.py")
 
         rcParams_str = "\n".join(
             [
@@ -111,6 +145,16 @@ class SpyllingFigure(Figure):
                     zip.writestr(file_name, buffer.getvalue())
 
         self.__buffers.clear()
+
+    savefig.__doc__ = "\n".join(
+        [
+            (
+                "This extended version also backs up the data needed to reproduce this "
+                "figure."
+            ),
+            Figure.savefig.__doc__ or "",
+        ]
+    )
 
     def __save_text(self, text, path):
         if self.__zipped:

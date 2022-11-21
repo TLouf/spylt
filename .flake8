@@ -1,3 +1,4 @@
 [flake8]
 exclude = docs
 max-line-length = 88
+per-file-ignores = spylt._typing.py:F401
