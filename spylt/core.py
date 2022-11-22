@@ -6,6 +6,7 @@ import subprocess
 import sys
 import zipfile
 from collections.abc import Iterable
+from importlib import import_module
 from pathlib import Path
 from typing import Any
 
@@ -59,6 +60,12 @@ class SpyllingFigure(Figure):
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
+        module = getattr(plot_generator, "__module__", None)
+        # If we can get a module and it's not __main__ from an interactive session:
+        if module is not None:
+            module = import_module(module)
+            if hasattr(module, "__file__"):
+                plot_generator = module
         self.__plot_generator = plot_generator
         self.__data = data
         self.__as_dir = as_dir
@@ -116,7 +123,11 @@ class SpyllingFigure(Figure):
                     pass
 
         if plot_generator is not None:
-            source = inspect.getsource(plot_generator)
+            if plot_generator.__name__ == "__main__":
+                with open(plot_generator.__file__) as f:
+                    source = f.read()
+            else:
+                source = inspect.getsource(plot_generator)
             self.__save_text(source, savedir_path / f"{plot_generator.__name__}.py")
 
         rcParams_str = "\n".join(
