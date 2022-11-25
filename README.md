@@ -29,15 +29,19 @@ good practices such as version control, saving intermediary results and figure m
 
 ## Installation
 
-The simplest is to install with `pip`
+The simplest is to install with `pip`:
 
 ```
 pip install spylt
 ```
 
-To install from source, first clone from the repository (or your own fork if you wish to
-open a pull request), and then use [`poetry`](https://python-poetry.org/docs/) to
-install
+To install the latest development version from source (requires `pip >= 19.0`):
+```
+pip install git+https://github.com/TLouf/spylt.git
+```
+
+To install an editable version for development, first clone from the repository (or your
+own fork), and then use [`poetry`](https://python-poetry.org/docs/) to install:
 
 ```
 git clone https://github.com/TLouf/spylt.git
