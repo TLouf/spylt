@@ -1,6 +1,8 @@
 Wrappers
 ========
 
-.. autodecorator:: spylt.spylling
+.. container:: longsig
 
-.. autofunction:: spylt.SpyllingContext
+    .. autodecorator:: spylt.spylling
+
+    .. autofunction:: spylt.SpyllingContext

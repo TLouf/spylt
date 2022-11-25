@@ -1,6 +1,11 @@
 SpyllingFigure
 ==============
 
-.. autoclass:: spylt.SpyllingFigure
-   :show-inheritance:
-   :members: savefig
+.. container:: longsig
+
+   .. autoclass:: spylt.SpyllingFigure
+      :show-inheritance:
+
+      .. container:: shortsig
+
+         .. automethod:: savefig
