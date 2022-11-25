@@ -26,6 +26,11 @@ def SpyllingContext(
 
     Parameters
     ----------
+    plot_generator
+        Function, method or module used to generate the figure.
+    data
+        Dictionary containing all the data objects necessary to reproduce the figure
+        with `plot_generator`.
     as_dir
         Whether to save the backup in a child directory, named after the figure
         file's name.
