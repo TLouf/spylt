@@ -1,7 +1,7 @@
 Wrappers
 ========
 
-.. container:: longsig
+.. container:: long-sig
 
     .. autodecorator:: spylt.spylling
 

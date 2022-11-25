@@ -1,12 +1,12 @@
 /* adapted from: https://github.com/sphinx-doc/sphinx/issues/1514#issuecomment-742703082 */
 
-.longsig .sig-param:not(.shortsig .sig-param)::before {
+.long-sig .sig-param:not(.short-sig .sig-param)::before {
     content: "\a\20\20\20\20";
     white-space: pre;
 }
 
 /* Newline after the last parameter (so the closing bracket is on a new line) */
-.longsig .sig-param:not(.shortsig .sig-param):last-of-type::after {
+.long-sig .sig-param:not(.short-sig .sig-param):last-of-type::after {
     content: "\a";
     white-space: pre;
 }
