@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from types import FunctionType, MethodType, ModuleType
+from types import FunctionType, ModuleType
 
-PlotGenType = FunctionType | MethodType | ModuleType
+PlotGenType = FunctionType | ModuleType

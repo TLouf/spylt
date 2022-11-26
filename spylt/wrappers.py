@@ -13,7 +13,7 @@ from spylt.core import SpyllingFigure
 
 @contextmanager
 def SpyllingContext(
-    plot_generator: PlotGenType | None = None,
+    plot_fun: PlotGenType | None = None,
     data: dict[str, Any] | None = None,
     as_dir: bool = True,
     zipped: bool = False,
@@ -26,11 +26,11 @@ def SpyllingContext(
 
     Parameters
     ----------
-    plot_generator
-        Function, method or module used to generate the figure.
+    plot_fun
+        Function or method used to generate the figure.
     data
         Dictionary containing all the data objects necessary to reproduce the figure
-        with `plot_generator`.
+        with `plot_fun`.
     as_dir
         Whether to save the backup in a child directory, named after the figure
         file's name.
@@ -54,7 +54,7 @@ def SpyllingContext(
     ...     # Code that creates your figure.
     """
     kwargs = {
-        "plot_generator": plot_generator,
+        "plot_fun": plot_fun,
         "data": data,
         "as_dir": as_dir,
         "zipped": zipped,
@@ -89,7 +89,7 @@ def spylling(
     """Decorator to wrap functions generating a figure to turn it into a SpyllingFigure.
 
     The :py:class:`spylt.SpyllingFigure` instantiated within the decorated function
-    will be passed the function as `plot_generator`, and its arguments and keyword
+    will be passed the function as `plot_fun`, and its arguments and keyword
     arguments as `data`.
 
     Parameters
@@ -158,7 +158,7 @@ def spylling(
             data.update(kwargs)
 
             with SpyllingContext(
-                plot_generator=func,
+                plot_fun=func,
                 data=data,
                 as_dir=as_dir,
                 zipped=zipped,
