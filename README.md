@@ -70,13 +70,14 @@ more to less recommended:
     ```python
     >>> ax = plot(dataset, scatter_size=10)
     >>> ax.get_figure().savefig('fig.pdf')
-    Saved figure: fig
-    Saving backup data to ./fig
-    Saved plot.py
-    Saved matplotlibrc
-    Saved dataset.pickle
-    Saved scatter_size.pickle
-    Saved cmap.pickle
+    Saved figure: fig.pdf
+    Saving backup data to:
+    └── fig
+        ├── plot.py
+        ├── scatter_size.pickle
+        ├── dataset.pickle
+        ├── cmap.pickle
+        └── matplotlibrc
     ```
 
     The `savefig` call can be made outside or inside the `plot` function, everything
@@ -105,15 +106,16 @@ more to less recommended:
     possibly the function definition:
     ```python
     >>> fig.savefig('fig.pdf', plot_generator=plot, data={'dataset': dataset})
-    Saved figure: fig
-    Saving backup data to ./fig
-    Saved plot.py
-    Saved matplotlibrc
-    Saved dataset.pickle
+    Saved figure: fig.pdf
+    Saving backup data to:
+    └── fig
+        ├── plot.py
+        ├── dataset.pickle
+        └── matplotlibrc
     ```
 
 ## How's that package called again?
 
 If it can help you remember the name of the package in the future, it comes from the
-idea of spilling data to disk, stylised as `spylt` which is reminiscent of both `python`
-and `matplotlib.pyplot` (`plt`).
+idea of spilling data to disk, stylised as `spylt` which is reminiscent of
+`matplotlib.pyplot`.
