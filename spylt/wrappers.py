@@ -72,8 +72,10 @@ def SpyllingContext(
     # partial sets default, but if user calls func with explicit kwarg, it will
     # override this default (which is a good thing).
     setattr(owner, func.__name__, partial(func, FigureClass=SpyllingFigure, **kwargs))
-    yield
-    setattr(owner, func.__name__, func)
+    try:
+        yield
+    finally:
+        setattr(owner, func.__name__, func)
 
 
 def spylling(
