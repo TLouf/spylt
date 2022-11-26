@@ -105,7 +105,7 @@ more to less recommended:
     In the two previous cases, you'll have to specify what data you want to save, and
     possibly the function definition:
     ```python
-    >>> fig.savefig('fig.pdf', plot_generator=plot, data={'dataset': dataset})
+    >>> fig.savefig('fig.pdf', plot_fun=plot, data={'dataset': dataset})
     Saved figure: fig.pdf
     Saving backup data to:
     └── fig
@@ -117,5 +117,5 @@ more to less recommended:
 ## How's that package called again?
 
 If it can help you remember the name of the package in the future, it comes from the
-idea of spilling data to disk, stylised as `spylt` which is reminiscent of
+idea of spilling data to disk, stylised as `spylt` to be reminiscent of
 `matplotlib.pyplot`.
