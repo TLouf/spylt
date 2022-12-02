@@ -148,13 +148,14 @@ def spylling(
     def decorator_plot(func):
         @wraps(func)
         def wrapper_plot(*args, **kwargs):
-            data = {
-                param_name: param.default
-                for param_name, param in inspect.signature(func).parameters.items()
+            argspec = inspect.getfullargspec(func)
+            defaults = argspec.defaults or ()
+            defaults = {
+                argspec.args[-1 - i]: defaults[-1 - i] for i in range(len(defaults))
             }
-            all_arg_names = list(data.keys())
+            data = {**(argspec.kwonlydefaults or {}), **defaults}
             for i, a in enumerate(args):
-                data[all_arg_names[i]] = a
+                data[argspec.args[i]] = a
             data.update(kwargs)
 
             with SpyllingContext(

@@ -16,8 +16,6 @@ from matplotlib.pyplot import Figure, rcParams
 
 from spylt._typing import PlotGenType
 
-# TODO: class method check
-
 
 class SpyllingFigure(Figure):
     """Figure subclass that will backup data to disk on save.
