@@ -1,5 +1,4 @@
-from __future__ import annotations
-
 from types import FunctionType, ModuleType
+from typing import Union
 
-PlotGenType = FunctionType | ModuleType
+PlotGenType = Union[FunctionType, ModuleType]
