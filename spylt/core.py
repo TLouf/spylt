@@ -139,8 +139,8 @@ class SpyllingFigure(Figure):
 
         plot_module = self.__plot_module
         plot_fun = self.__plot_fun
-        fun_name = plot_fun.__name__
         if plot_module is not None:
+            fun_name = plot_fun.__name__
             module_name = plot_module.__name__
             if module_name == "__main__":
                 with open(plot_module.__file__) as f:
@@ -161,10 +161,10 @@ class SpyllingFigure(Figure):
             # Else, during recovery when we see only one file, we know that we simply
             # have to import from that file the function with the same name.
 
-        else:
+        elif plot_fun is not None:
             # Just save one file with function definition.
             plot_fun_source = inspect.getsource(plot_fun)
-            self.__save_text(plot_fun_source, savedir_path, f"{fun_name}.py")
+            self.__save_text(plot_fun_source, savedir_path, f"{plot_fun.__name__}.py")
 
         # Is it worth implementing class specific save formats (for common ones)? Like
         # DataFrames to csv or parquet, which have the advantage of not being
