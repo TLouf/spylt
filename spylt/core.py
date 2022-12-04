@@ -176,13 +176,6 @@ class SpyllingFigure(Figure):
             if not isinstance(value, self.__excluded_types):
                 self.__save_pickle(value, savedir_path, f"{arg}.pickle")
 
-        if self.__zipped:
-            with zipfile.ZipFile(savedir_path.with_suffix(".zip"), "w") as zip:
-                for file_name, buffer in self.__buffers.items():
-                    zip.writestr(file_name, buffer.getvalue())
-
-        self.__buffers.clear()
-
         rcParams_lines = str(rcParams).replace("#", "").splitlines()
         output_lines = []
         for line in rcParams_lines:
@@ -196,6 +189,13 @@ class SpyllingFigure(Figure):
                 )
         rcParams_str = "\n".join(output_lines)
         self.__save_text(rcParams_str, savedir_path, "matplotlibrc", last=True)
+
+        if self.__zipped:
+            with zipfile.ZipFile(savedir_path.with_suffix(".zip"), "w") as zip:
+                for file_name, buffer in self.__buffers.items():
+                    zip.writestr(file_name, buffer.getvalue())
+
+        self.__buffers.clear()
 
     savefig.__doc__ = "\n".join(
         [
