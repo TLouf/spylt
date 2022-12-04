@@ -90,11 +90,21 @@ class SpyllingFigure(Figure):
         # savefig first to limit possibility of a bug from our side to impede saving.
         super().savefig(*args, **kwargs)
 
+        fname = args[0]
+        if not isinstance(fname, (str, Path)):
+            if hasattr(fname, "name"):
+                # For file-like objects
+                fname = fname.name
+            else:
+                # For buffers, if figure is saved to buffer the user probably does not
+                # want to backup the data to disk.
+                return
+
+        fig_path = Path(fname)
+        self.__verbose_print(f"Saved figure: {fig_path.name}")
+
         data = self.__data or {}
         self.__buffers = {}
-
-        fig_path = Path(args[0])
-        self.__verbose_print(f"Saved figure: {fig_path.name}")
 
         savedir_path = fig_path.parent
         if self.__as_dir or self.__zipped:
