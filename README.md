@@ -1,6 +1,7 @@
 # spylt
-![](https://img.shields.io/pypi/pyversions/spylt)
-[![](https://img.shields.io/pypi/v/spylt.svg)](https://pypi.python.org/pypi/spylt)
+[![ReadtheDocs](https://img.shields.io/readthedocs/spylt)](https://spylt.readthedocs.io)
+[![PyPi](https://img.shields.io/pypi/v/spylt.svg)](https://pypi.python.org/pypi/spylt)
+![Python](https://img.shields.io/pypi/pyversions/spylt)
 
 
 `spylt` is a simple utility to back up the data necessary to reproduce a matplotlib
