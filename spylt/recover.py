@@ -118,8 +118,7 @@ def recover_data(path: str | Path) -> dict[str, Any]:
     path = _extract_if_zip(path)
     data = {}
     for p in path.glob("*.pickle"):
-        with open(p, "rb") as f:
-            data[p.stem] = pickle.load(f)
+        data[p.stem] = pickle.loads(p.read_bytes())
 
     return data
 

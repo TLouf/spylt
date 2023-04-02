@@ -237,8 +237,7 @@ class SpyllingFigure(Figure):
 
         else:
             path.parent.mkdir(exist_ok=True, parents=True)
-            with open(path, "wb") as f:
-                pickle.dump(obj, f)
+            path.write_bytes(pickle.dumps(obj))
 
         if self.__verbose:
             _print_structure(rel_file_path)
