@@ -7,10 +7,10 @@
 `spylt` is a simple utility to back up the data necessary to reproduce a matplotlib
 figure. Ever came back after weeks, months (years?) to a figure that you need to
 slightly adjust, only to find out that you have no idea where you buried that piece of
-code or that dataset that you need to generate this plot? That's a situation in which
-having used `spylt` would have helped. It provides a decorator for your plotting
-functions that adds the functionality that upon saving the figure, a copy of all the
-following metadata can be saved:
+code or that dataset that you need to generate this plot? That's a typical situation in
+which `spylt` would have helped. It provides a decorator for your plotting functions
+that adds the functionality that upon saving the figure, a copy of all the following
+metadata can be saved:
 
 - The function or even the function's module code, as a `.py` file.
 - The values of all of the function's arguments, as
@@ -103,17 +103,17 @@ more to less recommended:
     ...
     ```
 
-    In the two previous cases, you'll have to specify what data you want to save, and
-    possibly the function definition:
-    ```python
-    >>> fig.savefig('fig.pdf', plot_fun=plot, data={'dataset': dataset})
-    Saved figure: fig.pdf
-    Saving backup data to:
-    └── fig
-        ├── plot.py
-        ├── dataset.pickle
-        └── matplotlibrc
-    ```
+In the two previous cases, you'll have to specify what data you want to save, and
+possibly the function definition:
+```python
+>>> fig.savefig('fig.pdf', plot_fun=plot, data={'dataset': dataset})
+Saved figure: fig.pdf
+Saving backup data to:
+└── fig
+    ├── plot.py
+    ├── dataset.pickle
+    └── matplotlibrc
+```
 
 ## How's that package called again?
 
