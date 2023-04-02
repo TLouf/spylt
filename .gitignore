@@ -105,3 +105,6 @@ ENV/
 # IDE settings
 .vscode/
 .idea/
+
+# Testing
+result_images
