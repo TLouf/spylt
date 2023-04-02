@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from contextlib import contextmanager
 from functools import partial, wraps
 from importlib import import_module
+from itertools import chain
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -156,7 +157,9 @@ def spylling(
                 argspec.args[-1 - i]: defaults[-1 - i] for i in range(len(defaults))
             }
             data = {**(argspec.kwonlydefaults or {}), **defaults}
-            for i, a in enumerate(args):
+            parent_instance = getattr(func, "__self__", None)
+            arg_iter = chain([parent_instance], args) if parent_instance else args
+            for i, a in enumerate(arg_iter):
                 data[argspec.args[i]] = a
             data.update(kwargs)
 
