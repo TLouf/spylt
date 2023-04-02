@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import pickle
+import sys
 import zipfile
 from pathlib import Path
 from types import FunctionType
@@ -69,17 +70,13 @@ def recover_fun(path: str | Path) -> FunctionType:
     fun
         Function that generated the plot to recover.
     """
-    # only works if path is child of current directory, TODO: implement for any path?
     path = _extract_if_zip(path)
     py_files = list(path.glob("**/*.py"))
     global module
     if len(py_files) == 1:
         p = py_files[0]
         # function name and module name are necessarily the same
-        if path.is_absolute():
-            p = p.relative_to(path.parent)
-        module_name = ".".join(p.with_suffix("").parts)
-        module = importlib.import_module(module_name)
+        module = _module_from_file_and_parent_paths(p, path)
         fun = getattr(module, p.stem)
     elif len(py_files) == 2:
         # One file with a module, another that just imports function which has a name
@@ -87,15 +84,13 @@ def recover_fun(path: str | Path) -> FunctionType:
         file_sizes = [p.stat().st_size for p in py_files]
         # The module contains the function so it's necessarily a bigger file.
         module_idx = int(file_sizes[0] < file_sizes[1])
-        p = py_files[module_idx]
-        if path.is_absolute():
-            p = p.relative_to(path.parent)
-        module_name = ".".join(p.with_suffix("").parts)
-        module = importlib.import_module(module_name)
-        fun = getattr(module, py_files[1 - module_idx].stem)
+        p = py_files[1 - module_idx]
+        module = _module_from_file_and_parent_paths(p, path)
+        fun = getattr(module, p.stem)
     else:
         raise ValueError(
-            "The backup seems to be corrupted, there are at least three .py files."
+            f"The backup seems to be corrupted, there are {len(py_files)} .py files,"
+            " while there should be 1 or 2."
         )
     return fun
 
@@ -147,10 +142,30 @@ def recover_rcParams(path: str | Path) -> matplotlib.RcParams:
 
 
 def _extract_if_zip(path: str | Path) -> Path:
+    # Removes extension if path does not point to a directory, so if user passes in path
+    # to figure, it still works
     path = Path(path)
 
-    if not path.is_dir() and path.suffix == ".zip":
-        with zipfile.ZipFile(path, "r") as zip:
-            zip.extractall(path.stem)
+    if not path.is_dir():
+        if path.suffix == ".zip":
+            with zipfile.ZipFile(path, "r") as zip:
+                zip.extractall(path.stem)
         path = path.with_suffix("")
+        if not path.exists():
+            # can happen if user passes in path to figure file, and was spylt as zipped.
+            path = path.with_suffix(".zip")
+            if not path.exists():
+                raise ValueError(
+                    "No recovery files could be found, please check the passed-in path."
+                )
     return path
+
+
+def _module_from_file_and_parent_paths(pyfile_path, parent_path):
+    if parent_path.is_absolute():
+        if not parent_path.is_relative_to(Path(".")):
+            sys.path.append(str(parent_path.parent))
+        pyfile_path = pyfile_path.relative_to(parent_path.parent)
+    module_name = ".".join(pyfile_path.with_suffix("").parts)
+    module = importlib.import_module(module_name)
+    return module

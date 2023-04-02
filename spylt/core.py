@@ -12,6 +12,7 @@ from importlib import import_module
 from itertools import accumulate
 from operator import truediv
 from pathlib import Path
+from textwrap import dedent
 from typing import Any
 
 from matplotlib.pyplot import Figure, rcParams
@@ -143,6 +144,7 @@ class SpyllingFigure(Figure):
             fun_name = plot_fun.__name__
             module_name = plot_module.__name__
             if module_name == "__main__":
+                module_name = fun_name
                 with open(plot_module.__file__) as f:
                     source = f.read()
             else:
@@ -156,14 +158,24 @@ class SpyllingFigure(Figure):
             # python file with the name of the function so as to retain this information
             # for recovery.
             if fun_name != module_name:
-                content = f"from {module_name} import {fun_name}"
+                if hasattr(plot_fun, "__self__"):
+                    class_name = plot_fun.__self__.__class__.__name__
+                    content = "\n".join(
+                        [
+                            f"from {module_name} import {class_name}",
+                            f"{fun_name} = {class_name}.{fun_name}",
+                        ]
+                    )
+                else:
+                    content = f"from {module_name} import {fun_name}"
                 self.__save_text(content, savedir_path, f"{fun_name}.py")
             # Else, during recovery when we see only one file, we know that we simply
             # have to import from that file the function with the same name.
 
         elif plot_fun is not None:
-            # Just save one file with function definition.
-            plot_fun_source = inspect.getsource(plot_fun)
+            # Just save one file with function definition. Remove indent as a method's
+            # code returned by `getsource` will be indented.
+            plot_fun_source = dedent(inspect.getsource(plot_fun))
             self.__save_text(plot_fun_source, savedir_path, f"{plot_fun.__name__}.py")
 
         # Is it worth implementing class specific save formats (for common ones)? Like
