@@ -1,4 +1,5 @@
 """Top-level package for spylt."""
+
 import sys
 
 if sys.version_info < (3, 10):
@@ -7,18 +8,8 @@ if sys.version_info < (3, 10):
 else:
     from importlib import metadata
 
-from spylt.core import SpyllingFigure
-from spylt.recover import recover, recover_data, recover_fun, recover_rcParams
-from spylt.wrappers import SpyllingContext, spylling
-
-__all__ = [
-    SpyllingFigure,
-    SpyllingContext,
-    spylling,
-    recover,
-    recover_data,
-    recover_fun,
-    recover_rcParams,
-]
+from .core import SpyllingFigure
+from .recover import recover, recover_data, recover_fun, recover_rcParams
+from .wrappers import SpyllingContext, spylling
 
 __version__ = metadata.version("spylt")
